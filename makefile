@@ -5,6 +5,9 @@ SHELL = $(if $(wildcard $(SHELL_PATH)),/bin/ash,/bin/bash)
 run:
 	go run app/services/sales-api/main.go | go run app/tooling/logfmt/main.go
 
+help:
+	go run app/services/sales-api/main.go --help
+
 # ==============================================================================
 # Define dependencies
 
@@ -86,3 +89,9 @@ dev-describe-deployment:
 
 dev-describe-sales:
 	kubectl describe pod --namespace=$(NAMESPACE) -l app=$(APP)
+
+# ==============================================================================
+
+tidy:
+	go mod tidy
+	go mod vendor
