@@ -22,9 +22,9 @@ func Panics() web.Middleware {
 				if rec := recover(); rec != nil {
 					trace := debug.Stack()
 					err = fmt.Errorf("PANIC [%v] TRACE[%s]", rec, string(trace))
-				}
 
-				metrics.AddPanics(ctx)
+					metrics.AddPanics(ctx)
+				}
 			}()
 
 			return handler(ctx, w, r)
