@@ -11,6 +11,9 @@ help:
 curl:
 	curl -il http://localhost:3000/test
 
+load:
+	hey -m GET -c 100 -n 10000 http://localhost:3000/test
+
 # ==============================================================================
 # Define dependencies
 
