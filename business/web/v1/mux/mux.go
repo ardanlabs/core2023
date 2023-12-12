@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/ardanlabs/service/foundation/logger"
-	"github.com/dimfeld/httptreemux/v5"
+	"github.com/ardanlabs/service/foundation/web"
 )
 
 // Config contains all the mandatory systems required by handlers.
@@ -17,14 +17,14 @@ type Config struct {
 // RouteAdder defines behavior that sets the routes to bind for an instance
 // of the service.
 type RouteAdder interface {
-	Add(mux *httptreemux.ContextMux, cfg Config)
+	Add(app *web.App, cfg Config)
 }
 
 // WebAPI constructs a http.Handler with all application routes bound.
-func WebAPI(cfg Config, routeAdder RouteAdder) *httptreemux.ContextMux {
-	mux := httptreemux.NewContextMux()
+func WebAPI(cfg Config, routeAdder RouteAdder) *web.App {
+	app := web.NewApp(cfg.Shutdown)
 
-	routeAdder.Add(mux, cfg)
+	routeAdder.Add(app, cfg)
 
-	return mux
+	return app
 }

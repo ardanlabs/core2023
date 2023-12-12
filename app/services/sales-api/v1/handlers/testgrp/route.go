@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/ardanlabs/service/business/web/v1/mux"
-	"github.com/dimfeld/httptreemux/v5"
+	"github.com/ardanlabs/service/foundation/web"
 )
 
-func Route(mux *httptreemux.ContextMux, cfg mux.Config) {
-	mux.Handle(http.MethodGet, "/test", Test)
+func Route(app *web.App, cfg mux.Config) {
+	app.Handle(http.MethodGet, "/test", Test)
 }
