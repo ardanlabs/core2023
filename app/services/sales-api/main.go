@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/ardanlabs/conf/v3"
+	"github.com/ardanlabs/service/app/services/sales-api/v1/build/all"
 	"github.com/ardanlabs/service/business/web/v1/debug"
 	"github.com/ardanlabs/service/business/web/v1/mux"
 	"github.com/ardanlabs/service/foundation/logger"
@@ -120,7 +121,7 @@ func run(ctx context.Context, log *logger.Logger) error {
 
 	api := http.Server{
 		Addr:         cfg.Web.APIHost,
-		Handler:      mux.WebAPI(cfgMux),
+		Handler:      mux.WebAPI(cfgMux, all.Routes()),
 		ReadTimeout:  cfg.Web.ReadTimeout,
 		WriteTimeout: cfg.Web.WriteTimeout,
 		IdleTimeout:  cfg.Web.IdleTimeout,
