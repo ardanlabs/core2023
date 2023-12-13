@@ -11,6 +11,7 @@ SHELL = $(if $(wildcard $(SHELL_PATH)),/bin/ash,/bin/bash)
 # 	$ openssl rsa -pubout -in private.pem -out public.pem
 #
 #   https://play.openpolicyagent.org/
+#   https://play.openpolicyagent.org/p/Yb4lEstpv2
 
 run:
 	go run app/services/sales-api/main.go | go run app/tooling/logfmt/main.go
