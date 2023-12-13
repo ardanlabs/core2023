@@ -62,12 +62,12 @@ func GenToken() error {
 	// limit PEM file size to 1 megabyte. This should be reasonable for
 	// almost any PEM file and prevents shenanigans like linking the file
 	// to /dev/random or something like that.
-	pem, err := io.ReadAll(io.LimitReader(file, 1024*1024))
+	pemData, err := io.ReadAll(io.LimitReader(file, 1024*1024))
 	if err != nil {
 		return fmt.Errorf("reading auth private key: %w", err)
 	}
 
-	privateKey, err := jwt.ParseRSAPrivateKeyFromPEM(pem)
+	privateKey, err := jwt.ParseRSAPrivateKeyFromPEM(pemData)
 	if err != nil {
 		return fmt.Errorf("parsing auth private key: %w", err)
 	}
@@ -78,6 +78,26 @@ func GenToken() error {
 	}
 
 	fmt.Println(str)
+	fmt.Println("=======================================================")
+
+	// -------------------------------------------------------------------------
+
+	// Marshal the public key from the private key to PKIX.
+	asn1Bytes, err := x509.MarshalPKIXPublicKey(&privateKey.PublicKey)
+	if err != nil {
+		return fmt.Errorf("marshaling public key: %w", err)
+	}
+
+	// Construct a PEM block for the public key.
+	publicBlock := pem.Block{
+		Type:  "PUBLIC KEY",
+		Bytes: asn1Bytes,
+	}
+
+	// Write the public key to the public key file.
+	if err := pem.Encode(os.Stdout, &publicBlock); err != nil {
+		return fmt.Errorf("encoding to public file: %w", err)
+	}
 
 	return nil
 }
