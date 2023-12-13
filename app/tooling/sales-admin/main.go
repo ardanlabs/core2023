@@ -167,6 +167,37 @@ func GenToken() error {
 	// -------------------------------------------------------------------------
 	// Authorization in Rego
 
+	input2 := map[string]any{
+		"Roles": []string{"ADMIN"},
+	}
+
+	query2 := fmt.Sprintf("x = data.%s.%s", "ardan.rego", "rule_admin_only")
+
+	q2, err := rego.New(
+		rego.Query(query2),
+		rego.Module("policy.rego", authorization),
+	).PrepareForEval(ctx)
+	if err != nil {
+		return err
+	}
+
+	results2, err := q2.Eval(ctx, rego.EvalInput(input2))
+	if err != nil {
+		return fmt.Errorf("query: %w", err)
+	}
+
+	if len(results2) == 0 {
+		return errors.New("no results")
+	}
+
+	result2, ok := results2[0].Bindings["x"].(bool)
+	if !ok || !result2 {
+		fmt.Println("User NOT ADIMN - NOT AUTHORIZED")
+		return fmt.Errorf("bindings results[%v] ok[%v]", results, ok)
+	}
+
+	fmt.Println("AUTHORIZED")
+
 	return nil
 }
 
