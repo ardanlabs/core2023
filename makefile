@@ -28,7 +28,7 @@ load:
 admin:
 	go run app/tooling/sales-admin/main.go
 
-curl:
+auth:
 	curl -il -H "Authorization: Bearer ${TOKEN}" http://localhost:3000/auth
 
 # ==============================================================================
