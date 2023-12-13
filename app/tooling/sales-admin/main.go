@@ -162,9 +162,28 @@ func GenToken() error {
 	}
 
 	fmt.Println("Validated Signature")
+	fmt.Println("=======================================================")
+
+	// -------------------------------------------------------------------------
+	// Authorization in Rego
 
 	return nil
 }
+
+var authorization = `package ardan.rego
+
+import future.keywords.if
+import future.keywords.in
+
+default rule_admin_only := false
+
+role_admin := "ADMIN"
+
+rule_admin_only if {
+	claim_roles := {role | some role in input.Roles}
+	input_admin := {role_admin} & claim_roles
+	count(input_admin) > 0
+}`
 
 var authentication = `package ardan.rego
 
