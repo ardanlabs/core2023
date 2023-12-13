@@ -118,7 +118,7 @@ func run(ctx context.Context, log *logger.Logger) error {
 		KeyLookup: ks,
 	}
 
-	_, err = auth.New(authCfg)
+	auth, err := auth.New(authCfg)
 	if err != nil {
 		return fmt.Errorf("constructing auth: %w", err)
 	}
@@ -146,6 +146,7 @@ func run(ctx context.Context, log *logger.Logger) error {
 		Build:    build,
 		Shutdown: shutdown,
 		Log:      log,
+		Auth:     auth,
 	}
 
 	api := http.Server{
