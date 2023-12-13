@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bytes"
+	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -12,6 +15,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/open-policy-agent/opa/rego"
 )
 
 func main() {
@@ -96,10 +100,12 @@ func GenToken() error {
 	}
 
 	// Write the public key to the public key file.
-	if err := pem.Encode(os.Stdout, &publicBlock); err != nil {
+	var b bytes.Buffer
+	if err := pem.Encode(&b, &publicBlock); err != nil {
 		return fmt.Errorf("encoding to public file: %w", err)
 	}
 
+	fmt.Println(b.String())
 	fmt.Println("=======================================================")
 
 	// -------------------------------------------------------------------------
@@ -111,16 +117,51 @@ func GenToken() error {
 		jwt.RegisteredClaims
 		Roles []string
 	}
-	token2, _, err := parser.ParseUnverified(str, &claims2)
+	_, _, err = parser.ParseUnverified(str, &claims2)
 	if err != nil {
 		return fmt.Errorf("error parsing token: %w", err)
 	}
 
 	fmt.Printf("%#v\n", claims2)
-	fmt.Println(token2.Signature)
+	fmt.Println("=======================================================")
 
 	// -------------------------------------------------------------------------
 	// Authentication in Rego
+
+	input := map[string]any{
+		"Key":   b.String(),
+		"Token": str,
+		"ISS":   "service project",
+	}
+
+	query := fmt.Sprintf("x = data.%s.%s", "ardan.rego", "auth")
+
+	ctx := context.Background()
+
+	q, err := rego.New(
+		rego.Query(query),
+		rego.Module("policy.rego", authentication),
+	).PrepareForEval(ctx)
+	if err != nil {
+		return err
+	}
+
+	results, err := q.Eval(ctx, rego.EvalInput(input))
+	if err != nil {
+		return fmt.Errorf("query: %w", err)
+	}
+
+	if len(results) == 0 {
+		return errors.New("no results")
+	}
+
+	result, ok := results[0].Bindings["x"].(bool)
+	if !ok || !result {
+		fmt.Println("Signature Not Validated")
+		return fmt.Errorf("bindings results[%v] ok[%v]", results, ok)
+	}
+
+	fmt.Println("Validated Signature")
 
 	return nil
 }
