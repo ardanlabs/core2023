@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	v1 "github.com/ardanlabs/service/business/web/v1"
+	"github.com/ardanlabs/service/business/web/v1/auth"
 	"github.com/ardanlabs/service/foundation/logger"
 	"github.com/ardanlabs/service/foundation/web"
 )
@@ -25,6 +26,12 @@ func Errors(log *logger.Logger) web.Middleware {
 						Error: trsErr.Error(),
 					}
 					status = trsErr.Status
+
+				case auth.IsAuthError(err):
+					er = v1.ErrorResponse{
+						Error: http.StatusText(http.StatusUnauthorized),
+					}
+					status = http.StatusUnauthorized
 
 				default:
 					er = v1.ErrorResponse{
