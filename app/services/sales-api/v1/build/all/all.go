@@ -1,6 +1,7 @@
 package all
 
 import (
+	"github.com/ardanlabs/service/app/services/sales-api/v1/handlers/checkgrp"
 	"github.com/ardanlabs/service/app/services/sales-api/v1/handlers/testgrp"
 	"github.com/ardanlabs/service/business/web/v1/mux"
 	"github.com/ardanlabs/service/foundation/web"
@@ -16,5 +17,10 @@ type add struct{}
 
 // Add implements the RouterAdder interface.
 func (add) Add(app *web.App, cfg mux.Config) {
-	testgrp.Route(app, cfg)
+	testgrp.Routes(app, cfg)
+
+	checkgrp.Routes(app, checkgrp.Config{
+		Build: cfg.Build,
+		Log:   cfg.Log,
+	})
 }

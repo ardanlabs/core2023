@@ -9,7 +9,7 @@ import (
 	"github.com/ardanlabs/service/foundation/web"
 )
 
-func Route(app *web.App, cfg mux.Config) {
+func Routes(app *web.App, cfg mux.Config) {
 	authen := mid.Authenticate(cfg.Auth)
 	ruleAdmin := mid.Authorize(cfg.Auth, auth.RuleAdminOnly)
 
