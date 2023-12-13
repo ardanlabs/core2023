@@ -81,6 +81,7 @@ func GenToken() error {
 	fmt.Println("=======================================================")
 
 	// -------------------------------------------------------------------------
+	// Generating Public Key
 
 	// Marshal the public key from the private key to PKIX.
 	asn1Bytes, err := x509.MarshalPKIXPublicKey(&privateKey.PublicKey)
@@ -98,6 +99,25 @@ func GenToken() error {
 	if err := pem.Encode(os.Stdout, &publicBlock); err != nil {
 		return fmt.Errorf("encoding to public file: %w", err)
 	}
+
+	fmt.Println("=======================================================")
+
+	// -------------------------------------------------------------------------
+	// Decode Token To Get Parts
+
+	parser := jwt.NewParser(jwt.WithValidMethods([]string{jwt.SigningMethodRS256.Name}))
+
+	var claims2 struct {
+		jwt.RegisteredClaims
+		Roles []string
+	}
+	token2, _, err := parser.ParseUnverified(str, &claims2)
+	if err != nil {
+		return fmt.Errorf("error parsing token: %w", err)
+	}
+
+	fmt.Printf("%#v\n", claims2)
+	fmt.Println(token2.Signature)
 
 	return nil
 }

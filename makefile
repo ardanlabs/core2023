@@ -9,6 +9,8 @@ SHELL = $(if $(wildcard $(SHELL_PATH)),/bin/ash,/bin/bash)
 # 	To generate a private/public key PEM file.
 # 	$ openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bits:2048
 # 	$ openssl rsa -pubout -in private.pem -out public.pem
+#
+#   https://play.openpolicyagent.org/
 
 run:
 	go run app/services/sales-api/main.go | go run app/tooling/logfmt/main.go
