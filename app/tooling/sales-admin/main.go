@@ -193,7 +193,7 @@ func GenToken() error {
 	result2, ok := results2[0].Bindings["x"].(bool)
 	if !ok || !result2 {
 		fmt.Println("User NOT ADIMN - NOT AUTHORIZED")
-		return fmt.Errorf("bindings results[%v] ok[%v]", results, ok)
+		return fmt.Errorf("bindings results2[%v] ok[%v]", results2, ok)
 	}
 
 	fmt.Println("AUTHORIZED")
