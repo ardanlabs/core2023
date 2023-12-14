@@ -3,8 +3,6 @@ package userdb
 import (
 	"bytes"
 	"context"
-	"database/sql"
-	"database/sql/driver"
 	"errors"
 	"fmt"
 	"net/mail"
@@ -186,12 +184,9 @@ func (s *Store) QueryByIDs(ctx context.Context, userIDs []uuid.UUID) ([]user.Use
 	}
 
 	data := struct {
-		UserID interface {
-			driver.Valuer
-			sql.Scanner
-		} `db:"user_id"`
+		ID any `db:"user_id"`
 	}{
-		UserID: dbarray.Array(ids),
+		ID: dbarray.Array(ids),
 	}
 
 	const q = `
