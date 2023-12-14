@@ -7,6 +7,7 @@ import (
 	v1 "github.com/ardanlabs/service/business/web/v1"
 	"github.com/ardanlabs/service/business/web/v1/auth"
 	"github.com/ardanlabs/service/foundation/logger"
+	"github.com/ardanlabs/service/foundation/validate"
 	"github.com/ardanlabs/service/foundation/web"
 )
 
@@ -22,6 +23,17 @@ func Errors(log *logger.Logger) web.Middleware {
 				switch {
 				case v1.IsTrustedError(err):
 					trsErr := v1.GetTrustedError(err)
+
+					if validate.IsFieldErrors(trsErr.Err) {
+						fieldErrors := validate.GetFieldErrors(trsErr.Err)
+						er = v1.ErrorResponse{
+							Error:  "data validation error",
+							Fields: fieldErrors.Fields(),
+						}
+						status = trsErr.Status
+						break
+					}
+
 					er = v1.ErrorResponse{
 						Error: trsErr.Error(),
 					}
