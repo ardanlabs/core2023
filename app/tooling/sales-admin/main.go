@@ -14,15 +14,55 @@ import (
 	"os"
 	"time"
 
+	"github.com/ardanlabs/service/business/data/dbmigrate"
+	database "github.com/ardanlabs/service/business/data/dbsql/pgx"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/open-policy-agent/opa/rego"
 )
 
+var build = "develop"
+
 func main() {
-	err := GenToken()
+	err := Migrate()
 	if err != nil {
 		log.Fatalln(err)
 	}
+}
+
+// Migrate creates the schema in the database.
+func Migrate() error {
+	dbConfig := database.Config{
+		User:         "postgres",
+		Password:     "postgres",
+		Host:         "database-service.sales-system.svc.cluster.local",
+		Name:         "postgres",
+		MaxIdleConns: 2,
+		MaxOpenConns: 0,
+		DisableTLS:   true,
+	}
+
+	db, err := database.Open(dbConfig)
+	if err != nil {
+		return fmt.Errorf("connect database: %w", err)
+	}
+	defer db.Close()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := dbmigrate.Migrate(ctx, db); err != nil {
+		return fmt.Errorf("migrate database: %w", err)
+	}
+
+	fmt.Println("migrations complete")
+
+	if err := dbmigrate.Seed(ctx, db); err != nil {
+		return fmt.Errorf("seed database: %w", err)
+	}
+
+	fmt.Println("seed data complete")
+
+	return nil
 }
 
 // GenToken generates a JWT for the specified user.

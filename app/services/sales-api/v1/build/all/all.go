@@ -22,5 +22,6 @@ func (add) Add(app *web.App, cfg mux.Config) {
 	checkgrp.Routes(app, checkgrp.Config{
 		Build: cfg.Build,
 		Log:   cfg.Log,
+		DB:    cfg.DB,
 	})
 }
