@@ -138,3 +138,14 @@ statsviz:
 
 pgcli:
 	pgcli postgresql://postgres:postgres@localhost
+
+# ==============================================================================
+# Hitting endpoints
+
+token:
+	curl -il --user "admin@example.com:gophers" http://localhost:3000/users/token/54bb2165-71e1-41a6-af3e-7da4a0e1e2c1
+
+# export TOKEN="COPY TOKEN STRING FROM LAST CALL"
+
+users:
+	curl -il -H "Authorization: Bearer ${TOKEN}" http://localhost:3000/users?page=1&rows=2
