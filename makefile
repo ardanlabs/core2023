@@ -135,3 +135,6 @@ metrics-view:
 
 statsviz:
 	open -a "Google Chrome" http://localhost:4000/debug/statsviz
+
+pgcli:
+	pgcli postgresql://postgres:postgres@localhost
