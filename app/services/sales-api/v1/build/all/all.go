@@ -3,6 +3,7 @@ package all
 import (
 	"github.com/ardanlabs/service/app/services/sales-api/v1/handlers/checkgrp"
 	"github.com/ardanlabs/service/app/services/sales-api/v1/handlers/testgrp"
+	"github.com/ardanlabs/service/app/services/sales-api/v1/handlers/usergrp"
 	"github.com/ardanlabs/service/business/web/v1/mux"
 	"github.com/ardanlabs/service/foundation/web"
 )
@@ -23,5 +24,11 @@ func (add) Add(app *web.App, cfg mux.Config) {
 		Build: cfg.Build,
 		Log:   cfg.Log,
 		DB:    cfg.DB,
+	})
+
+	usergrp.Routes(app, usergrp.Config{
+		Log:  cfg.Log,
+		Auth: cfg.Auth,
+		DB:   cfg.DB,
 	})
 }

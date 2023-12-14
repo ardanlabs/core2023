@@ -10,6 +10,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/ardanlabs/service/business/core/user"
 	"github.com/ardanlabs/service/foundation/logger"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
@@ -22,11 +23,11 @@ var ErrForbidden = errors.New("attempted action is not allowed")
 // Claims represents the authorization claims transmitted via a JWT.
 type Claims struct {
 	jwt.RegisteredClaims
-	Roles []string `json:"roles"`
+	Roles []user.Role `json:"roles"`
 }
 
 // HasRole checks if the specified role exists.
-func (c Claims) HasRole(r string) bool {
+func (c Claims) HasRole(r user.Role) bool {
 	for _, role := range c.Roles {
 		if role == r {
 			return true
