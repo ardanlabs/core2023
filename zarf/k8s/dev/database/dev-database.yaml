@@ -21,6 +21,7 @@ metadata:
   name: database
   namespace: sales-system
 spec:
+  serviceName: database-service
   selector:
     matchLabels:
       app: database
