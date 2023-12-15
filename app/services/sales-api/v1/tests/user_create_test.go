@@ -14,7 +14,7 @@ func userCreate200(t *testing.T, app appTest, sd seedData) []tableData {
 	table := []tableData{
 		{
 			name:       "basic",
-			url:        "/v1/users",
+			url:        "/users",
 			token:      sd.admins[0].token,
 			method:     http.MethodPost,
 			statusCode: http.StatusCreated,
@@ -66,7 +66,7 @@ func userCreate400(t *testing.T, app appTest, sd seedData) []tableData {
 	table := []tableData{
 		{
 			name:       "missing-input",
-			url:        "/v1/users",
+			url:        "/users",
 			token:      sd.admins[0].token,
 			method:     http.MethodPost,
 			statusCode: http.StatusBadRequest,
@@ -82,7 +82,7 @@ func userCreate400(t *testing.T, app appTest, sd seedData) []tableData {
 		},
 		{
 			name:       "bad-role",
-			url:        "/v1/users",
+			url:        "/users",
 			token:      sd.admins[0].token,
 			method:     http.MethodPost,
 			statusCode: http.StatusBadRequest,
@@ -111,7 +111,7 @@ func userCreate401(t *testing.T, app appTest, sd seedData) []tableData {
 	table := []tableData{
 		{
 			name:       "emptytoken",
-			url:        "/v1/users",
+			url:        "/users",
 			token:      "",
 			method:     http.MethodPost,
 			statusCode: http.StatusUnauthorized,
@@ -125,7 +125,7 @@ func userCreate401(t *testing.T, app appTest, sd seedData) []tableData {
 		},
 		{
 			name:       "badtoken",
-			url:        "/v1/users",
+			url:        "/users",
 			token:      sd.admins[0].token[:10],
 			method:     http.MethodPost,
 			statusCode: http.StatusUnauthorized,
@@ -139,7 +139,7 @@ func userCreate401(t *testing.T, app appTest, sd seedData) []tableData {
 		},
 		{
 			name:       "badsig",
-			url:        "/v1/users",
+			url:        "/users",
 			token:      sd.admins[0].token + "A",
 			method:     http.MethodPost,
 			statusCode: http.StatusUnauthorized,
@@ -153,7 +153,7 @@ func userCreate401(t *testing.T, app appTest, sd seedData) []tableData {
 		},
 		{
 			name:       "wronguser",
-			url:        "/v1/users",
+			url:        "/users",
 			token:      sd.users[0].token,
 			method:     http.MethodPost,
 			statusCode: http.StatusUnauthorized,

@@ -16,7 +16,7 @@ func userUpdate200(t *testing.T, app appTest, sd seedData) []tableData {
 	table := []tableData{
 		{
 			name:       "basic",
-			url:        fmt.Sprintf("/v1/users/%s", sd.users[0].ID),
+			url:        fmt.Sprintf("/users/%s", sd.users[0].ID),
 			token:      sd.users[0].token,
 			method:     http.MethodPut,
 			statusCode: http.StatusOK,
@@ -68,7 +68,7 @@ func userUpdate400(t *testing.T, app appTest, sd seedData) []tableData {
 	table := []tableData{
 		{
 			name:       "bad-input",
-			url:        fmt.Sprintf("/v1/users/%s", sd.users[0].ID),
+			url:        fmt.Sprintf("/users/%s", sd.users[0].ID),
 			token:      sd.users[0].token,
 			method:     http.MethodPut,
 			statusCode: http.StatusBadRequest,
@@ -87,7 +87,7 @@ func userUpdate400(t *testing.T, app appTest, sd seedData) []tableData {
 		},
 		{
 			name:       "bad-role",
-			url:        fmt.Sprintf("/v1/users/%s", sd.users[0].ID),
+			url:        fmt.Sprintf("/users/%s", sd.users[0].ID),
 			token:      sd.users[0].token,
 			method:     http.MethodPut,
 			statusCode: http.StatusBadRequest,
@@ -111,7 +111,7 @@ func userUpdate401(t *testing.T, app appTest, sd seedData) []tableData {
 	table := []tableData{
 		{
 			name:       "emptytoken",
-			url:        fmt.Sprintf("/v1/users/%s", sd.users[0].ID),
+			url:        fmt.Sprintf("/users/%s", sd.users[0].ID),
 			token:      "",
 			method:     http.MethodPut,
 			statusCode: http.StatusUnauthorized,
@@ -123,7 +123,7 @@ func userUpdate401(t *testing.T, app appTest, sd seedData) []tableData {
 		},
 		{
 			name:       "badsig",
-			url:        fmt.Sprintf("/v1/users/%s", sd.users[0].ID),
+			url:        fmt.Sprintf("/users/%s", sd.users[0].ID),
 			token:      sd.users[0].token + "A",
 			method:     http.MethodPut,
 			statusCode: http.StatusUnauthorized,
@@ -135,7 +135,7 @@ func userUpdate401(t *testing.T, app appTest, sd seedData) []tableData {
 		},
 		{
 			name:       "wronguser",
-			url:        fmt.Sprintf("/v1/users/%s", sd.admins[0].ID),
+			url:        fmt.Sprintf("/users/%s", sd.admins[0].ID),
 			token:      app.userToken,
 			method:     http.MethodPut,
 			statusCode: http.StatusUnauthorized,

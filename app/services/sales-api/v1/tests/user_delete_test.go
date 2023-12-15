@@ -13,14 +13,14 @@ func userDelete200(t *testing.T, app appTest, sd seedData) []tableData {
 	table := []tableData{
 		{
 			name:       "asuser",
-			url:        fmt.Sprintf("/v1/users/%s", sd.users[1].ID),
+			url:        fmt.Sprintf("/users/%s", sd.users[1].ID),
 			token:      sd.users[1].token,
 			method:     http.MethodDelete,
 			statusCode: http.StatusNoContent,
 		},
 		{
 			name:       "asadmin",
-			url:        fmt.Sprintf("/v1/users/%s", sd.admins[1].ID),
+			url:        fmt.Sprintf("/users/%s", sd.admins[1].ID),
 			token:      sd.admins[1].token,
 			method:     http.MethodDelete,
 			statusCode: http.StatusNoContent,
@@ -34,7 +34,7 @@ func userDelete401(t *testing.T, app appTest, sd seedData) []tableData {
 	table := []tableData{
 		{
 			name:       "emptytoken",
-			url:        fmt.Sprintf("/v1/users/%s", sd.users[0].ID),
+			url:        fmt.Sprintf("/users/%s", sd.users[0].ID),
 			token:      "",
 			method:     http.MethodDelete,
 			statusCode: http.StatusUnauthorized,
@@ -46,7 +46,7 @@ func userDelete401(t *testing.T, app appTest, sd seedData) []tableData {
 		},
 		{
 			name:       "badsig",
-			url:        fmt.Sprintf("/v1/users/%s", sd.users[0].ID),
+			url:        fmt.Sprintf("/users/%s", sd.users[0].ID),
 			token:      sd.users[0].token + "A",
 			method:     http.MethodDelete,
 			statusCode: http.StatusUnauthorized,
@@ -58,7 +58,7 @@ func userDelete401(t *testing.T, app appTest, sd seedData) []tableData {
 		},
 		{
 			name:       "wronguser",
-			url:        fmt.Sprintf("/v1/users/%s", sd.users[0].ID),
+			url:        fmt.Sprintf("/users/%s", sd.users[0].ID),
 			token:      app.userToken,
 			method:     http.MethodDelete,
 			statusCode: http.StatusUnauthorized,

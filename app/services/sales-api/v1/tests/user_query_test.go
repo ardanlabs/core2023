@@ -29,7 +29,7 @@ func userQuery200(t *testing.T, app appTest, sd seedData) []tableData {
 	table := []tableData{
 		{
 			name:       "basic",
-			url:        "/v1/users?page=1&rows=10&orderBy=user_id,ASC&name=Name",
+			url:        "/users?page=1&rows=10&orderBy=user_id,ASC&name=Name",
 			token:      sd.admins[0].token,
 			statusCode: http.StatusOK,
 			method:     http.MethodGet,
@@ -70,7 +70,7 @@ func userQueryByID200(t *testing.T, app appTest, sd seedData) []tableData {
 	table := []tableData{
 		{
 			name:       "basic",
-			url:        fmt.Sprintf("/v1/users/%s", sd.users[0].ID),
+			url:        fmt.Sprintf("/users/%s", sd.users[0].ID),
 			token:      sd.users[0].token,
 			statusCode: http.StatusOK,
 			method:     http.MethodGet,
