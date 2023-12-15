@@ -127,6 +127,9 @@ tidy:
 	go mod tidy
 	go mod vendor
 
+test:
+	CGO_ENABLED=0 go test -count=1 ./...
+
 # ==============================================================================
 # Metrics and Tracing
 
