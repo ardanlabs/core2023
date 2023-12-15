@@ -148,4 +148,4 @@ token:
 # export TOKEN="COPY TOKEN STRING FROM LAST CALL"
 
 users:
-	curl -il -H "Authorization: Bearer ${TOKEN}" http://localhost:3000/users?page=1&rows=2
+	curl -il -H "Authorization: Bearer ${TOKEN}" "http://localhost:3000/users?page=1&rows=2"
